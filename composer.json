@@ -1,0 +1,17 @@
+{
+    "require": {
+        "easyswoole/easyswoole": "3.x",
+        "easyswoole/socket": "^1.1",
+        "easyswoole/task": "^1.1",
+        "easyswoole/redis-pool": "^2.1",
+        "easyswoole/queue": "^2.0",
+        "easyswoole/orm": "^1.4",
+        "easyswoole/rpc": "4.x",
+        "easyswoole/jwt": "^1.1"    
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/"
+        }
+    }
+}
