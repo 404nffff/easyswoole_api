@@ -27,24 +27,28 @@ class Router extends AbstractRouter
         $this->setGlobalMode(true);
 
         $routeCollector->get('/','Index/index');
-        $routeCollector->get('/streamCreate','Index/streamCreate');
-        $routeCollector->get('/streamInfoGet','Index/streamInfoGet');
-        $routeCollector->get('/streamAllGet','Index/streamAllGet');
-        $routeCollector->get('/streamLiveAllGet','Index/streamLiveAllGet');
-        $routeCollector->get('/streamLiveStatusGet','Index/streamLiveStatusGet');
-        $routeCollector->get('/streamLiveStatusBatchGet','Index/streamLiveStatusBatchGet');
-        $routeCollector->get('/streamDisabled','Index/streamDisabled');
-        $routeCollector->get('/streamEnabled','Index/streamEnabled');
-        $routeCollector->get('/liveSave','Index/liveSave');
-        $routeCollector->get('/liveSaveAs','Index/liveSaveAs');
-        $routeCollector->get('/liveHistoryActivity','Index/liveHistoryActivity');
-        $routeCollector->get('/liveSnapShot','Index/liveSnapShot');
+     
 
         $routeCollector->addGroup('/api',function (RouteCollector $collector){
-            $collector->get('/broadCast','Api/Index/broadCast');
-            $collector->get('/getOnlineUserList','Api/Index/getOnlineUserList');
-            $collector->get('/getOneOnlineUser','Api/Index/getOneOnlineUser');
-            $collector->get('/pushOneUserClient','Api/Index/pushOneUserClient');
+            
+            $collector->get('/streamCreate','Api/Qiniu/streamCreate');
+            $collector->get('/streamInfoGet','Api/Qiniu/streamInfoGet');
+            $collector->get('/streamAllGet','Api/Qiniu/streamAllGet');
+            $collector->get('/streamLiveAllGet','Api/Qiniu/streamLiveAllGet');
+            $collector->get('/streamLiveStatusGet','Api/Qiniu/streamLiveStatusGet');
+            $collector->get('/streamLiveStatusBatchGet','Api/Qiniu/streamLiveStatusBatchGet');
+            $collector->get('/streamDisabled','Api/Qiniu/streamDisabled');
+            $collector->get('/streamEnabled','Api/Qiniu/streamEnabled');
+            $collector->get('/liveSave','Api/Qiniu/liveSave');
+            $collector->get('/liveSaveAs','Api/Qiniu/liveSaveAs');
+            $collector->get('/liveHistoryActivity','Api/Qiniu/liveHistoryActivity');
+            $collector->get('/liveSnapShot','Api/Qiniu/liveSnapShot');
+            $collector->get('/liveUpdateConverts','Api/Qiniu/liveUpdateConverts');
+            $collector->get('/rtmpPushUrlCreate','Api/Qiniu/rtmpPushUrlCreate');
+            $collector->get('/rtmpPlayUrlGet','Api/Qiniu/rtmpPlayUrlGet');
+            $collector->get('/hlsPlayUrlGet','Api/Qiniu/hlsPlayUrlGet');
+            $collector->get('/hdlPlayUrlGet','Api/Qiniu/hdlPlayUrlGet');
+            $collector->get('/snapShotPlayUrlGet','Api/Qiniu/snapShotPlayUrlGet');
         });
 
         $this->setMethodNotAllowCallBack(function (Request $request,Response $response){

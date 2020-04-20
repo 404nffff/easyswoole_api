@@ -94,7 +94,7 @@ php vendor/bin/easyswoole install
     {
         "code":"200",
         "result":{
-            "hub":"502bg",
+            "hub":"testbg",
             "key":"test",
             "disabledTill":0,
             "converts":[]
@@ -307,7 +307,7 @@ php vendor/bin/easyswoole install
         "code":"200",
         "result":{
             "end":1587197168,
-            "fname":"recordings/z1.502bg.test/0_1587373142.m3u8",
+            "fname":"recordings/z1.testbg.test/0_1587373142.m3u8",
             "start":1586936811
         },
         "msg":"success"
@@ -344,7 +344,7 @@ php vendor/bin/easyswoole install
         "code":"200",
         "result":{
             "end":1587197168,
-            "fname":"recordings/z1.502bg.test/0_1587373142.m3u8",
+            "fname":"recordings/z1.testbg.test/0_1587373142.m3u8",
             "start":1586936811
         },
         "msg":"success"
@@ -401,7 +401,7 @@ php vendor/bin/easyswoole install
         "code":"200",
         "result":{
             "end":1587197168,
-            "fname":"recordings/z1.502bg.test/0_1587373142.m3u8",
+            "fname":"recordings/z1.testbg.test/0_1587373142.m3u8",
             "start":1586936811
         },
         "msg":"success"
@@ -516,3 +516,259 @@ php vendor/bin/easyswoole install
     }
 
 ```
+
+
+## 13. Api / Qiniu / liveUpdateConverts  POST 更改流的实时转码规格
+    
+### 必须参数
+* @param string $streamKey 流名称.
+
+### 可选参数
+
+* @param jsonArray $option 选项.   array("480p", "720p")
+
+* $option 选项 
+*  数组，转码配置，如果提交的 ProfileName 为空数组，那么之前的转码配置将被取消
+     
+### 返回
+* RETURN
+    * 
+
+``` 
+    
+    {
+        "code":"200",
+        "result":null,
+        "msg":"success"
+    }
+
+    200 {
+        
+    }
+    400 {
+    "error": "invalid stream key" // 只能修改原始流，包含@的流不允许
+    }
+    404 {
+        "error": "stream not found"
+    }
+    400 {
+    "error": "invalid args" // 转码配置不存在
+    }
+    619 {
+        "error": "no live" // 流不在直播
+    }
+
+    612 {
+    "error": "stream not found"
+    }
+
+```
+
+
+## 13. Api / Qiniu / rtmpPushUrlCreate  POST 生成 RTMP 推流地址
+    
+### 必须参数
+* @param string $streamKey 流名称.
+* @param string $expire    表示 URL 在多久之后失效 (秒).
+
+### 返回
+* RETURN
+    * 
+
+``` 
+    
+    
+    {
+        "code":"200",
+        "result":"rtmp://publish-rtmp.520bg.com/testbg/test?e=1587394353&token=Wd9vQSPN-ogPEwuxJfdPLurfIHIyaB2mQ79EKUqo:y3awIJBToRCsGs6njSPyWyv-Pjk=",   
+        "msg":"success"
+    }
+
+    200 {
+        
+    }
+    400 {
+    "error": "invalid stream key" // 只能修改原始流，包含@的流不允许
+    }
+    404 {
+        "error": "stream not found"
+    }
+    400 {
+    "error": "invalid args" // 转码配置不存在
+    }
+    619 {
+        "error": "no live" // 流不在直播
+    }
+
+    612 {
+    "error": "stream not found"
+    }
+
+```
+
+
+## 14. Api / Qiniu / hlsPlayUrlGet   HLS 直播放址
+    
+### 必须参数
+* @param string $streamKey 流名称.
+
+### 返回
+* RETURN
+    * 
+
+``` 
+    
+    
+    {
+        "code":"200",
+        "result":"http://live-hls.test.com/PiliSDKTest/streamkey.m3u8",   
+        "msg":"success"
+    }
+
+    200 {
+        
+    }
+    400 {
+    "error": "invalid stream key" // 只能修改原始流，包含@的流不允许
+    }
+    404 {
+        "error": "stream not found"
+    }
+    400 {
+    "error": "invalid args" // 转码配置不存在
+    }
+    619 {
+        "error": "no live" // 流不在直播
+    }
+
+    612 {
+    "error": "stream not found"
+    }
+
+```
+
+Î
+
+## 14. Api / Qiniu / rtmpPlayUrlGet   RTMP 直播放址
+    
+### 必须参数
+* @param string $streamKey 流名称.
+
+### 返回
+* RETURN
+    * 
+
+``` 
+    
+    
+    {
+        "code":"200",
+        "result":"rtmp://live-rtmp.test.com/PiliSDKTest/streamkey",   
+        "msg":"success"
+    }
+
+    200 {
+        
+    }
+    400 {
+    "error": "invalid stream key" // 只能修改原始流，包含@的流不允许
+    }
+    404 {
+        "error": "stream not found"
+    }
+    400 {
+    "error": "invalid args" // 转码配置不存在
+    }
+    619 {
+        "error": "no live" // 流不在直播
+    }
+
+    612 {
+    "error": "stream not found"
+    }
+
+```
+
+Î
+## 15. Api / Qiniu / hdlPlayUrlGet   HDL 直播放址
+    
+### 必须参数
+* @param string $streamKey 流名称.
+
+### 返回
+* RETURN
+    * 
+
+``` 
+    
+    
+    {
+        "code":"200",
+        "result":"http://live-hdl.test.com/PiliSDKTest/streamkey.flv",   
+        "msg":"success"
+    }
+
+    200 {
+        
+    }
+    400 {
+    "error": "invalid stream key" // 只能修改原始流，包含@的流不允许
+    }
+    404 {
+        "error": "stream not found"
+    }
+    400 {
+    "error": "invalid args" // 转码配置不存在
+    }
+    619 {
+        "error": "no live" // 流不在直播
+    }
+
+    612 {
+    "error": "stream not found"
+    }
+
+```
+
+
+## 15. Api / Qiniu / snapShotPlayUrlGet   截图直播地址
+    
+### 必须参数
+* @param string $streamKey 流名称.
+
+### 返回
+* RETURN
+    * 
+
+``` 
+    
+    
+    {
+        "code":"200",
+        "result":"http://live-snapshot.test.com/PiliSDKTest/streamkey.jp",   
+        "msg":"success"
+    }
+
+    200 {
+        
+    }
+    400 {
+    "error": "invalid stream key" // 只能修改原始流，包含@的流不允许
+    }
+    404 {
+        "error": "stream not found"
+    }
+    400 {
+    "error": "invalid args" // 转码配置不存在
+    }
+    619 {
+        "error": "no live" // 流不在直播
+    }
+
+    612 {
+    "error": "stream not found"
+    }
+
+```
+
+Î

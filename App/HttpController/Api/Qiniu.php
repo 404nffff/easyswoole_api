@@ -1,14 +1,14 @@
 <?php
 namespace App\HttpController\Api;
 
-use EasySwoole\Http\AbstractInterface\Controller;
+use App\HttpController\Api\Base;
 use EasySwoole\EasySwoole\Config as GlobalConfig;
 
 
 //导入七牛云
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), 'Utils/Qiniu', 'Pili_v2.php'));
+require join(DIRECTORY_SEPARATOR, array(dirname(dirname(dirname(__FILE__))), 'Utils/Qiniu', 'Pili_v2.php'));
 
-class Index extends Controller
+class Qiniu extends Base
 {
 
 

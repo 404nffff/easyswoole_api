@@ -16,6 +16,7 @@ abstract class Base extends Controller
 {
     protected function onRequest(?string $action): ?bool
     {
+        // var_dump(123);
         //$cookie = $this->request()->getCookieParams('user_cookie');
         //对cookie进行判断，比如在数据库或者是redis缓存中，存在该cookie信息，说明用户登录成功
         $isLogin = true;
