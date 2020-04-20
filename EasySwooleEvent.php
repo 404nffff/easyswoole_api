@@ -30,12 +30,7 @@ use EasySwoole\ORM\Db\Config;
 use EasySwoole\Component\TableManager;
 use Swoole\Table;
 
-//Rpc
-use EasySwoole\Rpc\NodeManager\RedisManager;
-use EasySwoole\Rpc\Config as RpcConfig;
-use EasySwoole\Rpc\Rpc;
 
-use App\Rpc\Goods;
 
 class EasySwooleEvent implements Event
 {
@@ -104,30 +99,6 @@ class EasySwooleEvent implements Event
             //链接预热
             DbManager::getInstance()->getConnection()->getClientPool()->keepMin();
         });
-
-        $confInstance = GlobalConfig::getInstance();
-        
-        $config       = new \EasySwoole\Pool\Config();
-        $redisConfig1 = new RedisConfig($confInstance->getConf('REDIS1'));
-
-       
-
-        //注册Rpc
-        $redisPool = new RedisPool($redisConfig1);
-
-        $manager = new RedisManager($redisPool);
-        //配置Rpc实例
-        $config = new RpcConfig();
-        //这边用于指定当前服务节点ip，如果不指定，则默认用UDP广播得到的地址
-        $config->setServerIp('127.0.0.1');
-        $config->setNodeManager($manager);
-        /*
-         * 配置初始化
-         */
-        Rpc::getInstance($config);
-        //添加服务
-        Rpc::getInstance()->add(new Goods());
-        Rpc::getInstance()->attachToServer(ServerManager::getInstance()->getSwooleServer());
     }
 
     public static function onRequest(Request $request, Response $response): bool

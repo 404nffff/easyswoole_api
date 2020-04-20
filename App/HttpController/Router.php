@@ -27,6 +27,18 @@ class Router extends AbstractRouter
         $this->setGlobalMode(true);
 
         $routeCollector->get('/','Index/index');
+        $routeCollector->get('/streamCreate','Index/streamCreate');
+        $routeCollector->get('/streamInfoGet','Index/streamInfoGet');
+        $routeCollector->get('/streamAllGet','Index/streamAllGet');
+        $routeCollector->get('/streamLiveAllGet','Index/streamLiveAllGet');
+        $routeCollector->get('/streamLiveStatusGet','Index/streamLiveStatusGet');
+        $routeCollector->get('/streamLiveStatusBatchGet','Index/streamLiveStatusBatchGet');
+        $routeCollector->get('/streamDisabled','Index/streamDisabled');
+        $routeCollector->get('/streamEnabled','Index/streamEnabled');
+        $routeCollector->get('/liveSave','Index/liveSave');
+        $routeCollector->get('/liveSaveAs','Index/liveSaveAs');
+        $routeCollector->get('/liveHistoryActivity','Index/liveHistoryActivity');
+        $routeCollector->get('/liveSnapShot','Index/liveSnapShot');
 
         $routeCollector->addGroup('/api',function (RouteCollector $collector){
             $collector->get('/broadCast','Api/Index/broadCast');

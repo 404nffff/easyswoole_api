@@ -63,33 +63,16 @@ return [
     //REDIS2服务注册名称
     'REDIS_REGISTER_NAME_2' => 'redis2',
 
+    //七牛 直播api对接使用 AccessKey
+    'QINIU_ACCESS_KEY' => '',
 
-    //人员集合名称
-    'REDIS_SORT_SET_NAME' => 'danmu',
+    //七牛 直播api对接使用 SecretKey
+    'QINIU_SECRET_KEY' => '',
     
-    //消息列队名称
-    'REDIS_QUEUE_NAME'   => 'danmuQueue',
-
-
-    //TASK\DanmuBroadCastTask 使用注册Redis 名称
-    'TASK_REDIS_DANMU_SEND_NAME'  => 'redis1',
-
-    //TASK\DanmuPushRedisQueueTask , Process\RedisQueueMysqlProcess  使用注册Redis 名称
-    'TASK_REDIS_DANMU_QUEUE_NAME' => 'redis2',
-
-
-    //RedisQueueMysqlProcess 自定义进程定时器时间（毫秒），到时间自动执行
-    'PROCESS_REDIS_QUEUE_MYSQL_TIME' => 5*1000,
-
-
-    //在线用户表 swoole table 名称
-    'SWOOLE_TABLE_ONLINE_USE_NAME' => 'onlineUsers'
-
-    // 'REDIS_CLUSTER' => [
-    //     ['172.16.253.156', 9001],
-    //     ['172.16.253.156', 9002],
-    //     ['172.16.253.156', 9003],
-    //     ['172.16.253.156', 9004]
-    // ]
+    //七牛 直播api对接使用 域名
+    'QINIU_HTTP_DOMAIN' => '',
+    
+    //七牛 直播api对接使用 直播空间
+    'QINIU_HUB' => ''
 
 ];
