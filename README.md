@@ -39,11 +39,15 @@ php vendor/bin/easyswoole install
 ```
     php easyswoole start [dev.php | produce.php] 默认dev.php
 
+    //守护进程
+    php easyswoole start d
+
+
 ```
 
 # 开放接口
 
-## 1. Api / Qiniu / streamCreate  POST 创建流
+## 1. Api / qiniu / streamCreate  POST 创建流
     
 ### 必须参数
 * streamKey string 流名称  名称必须满足 4-200个数字或字母
@@ -75,7 +79,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 2. Api / Qiniu / streamInfoGet  POST 获取流
+## 2. Api / qiniu / streamInfoGet  POST 获取流
     
 ### 必须参数
 * streamKey string 流名称  名称必须满足 4-200个数字或字母
@@ -111,7 +115,7 @@ php vendor/bin/easyswoole install
 
 ```
 
-## 3. Api / Qiniu / streamAllGet  POST 获取所有流信息
+## 3. Api / qiniu / streamAllGet  POST 获取所有流信息
     
 ### 可选参数
 * @param request prefix 流名的前缀.
@@ -143,7 +147,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 4. Api / Qiniu / streamLiveAllGet  POST 列出正在直播的流
+## 4. Api / qiniu / streamLiveAllGet  POST 列出正在直播的流
     
 ### 可选参数
 * @param request prefix 流名的前缀.
@@ -175,7 +179,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 5. Api / Qiniu / streamLiveStatusGet  POST 获取直播状态
+## 5. Api / qiniu / streamLiveStatusGet  POST 获取直播状态
     
 ### 必须参数
 * streamKey string 流名称  名称必须满足 4-200个数字或字母
@@ -202,7 +206,7 @@ php vendor/bin/easyswoole install
 
 ```
 
-## 6. Api / Qiniu / streamLiveStatusBatchGet  POST 批量获取直播状态
+## 6. Api / qiniu / streamLiveStatusBatchGet  POST 批量获取直播状态
     
 ### 必须参数
 * streamKey jsonArray 流名称  名称必须满足 4-200个数字或字母 "["test","sfasf"]"
@@ -236,7 +240,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 7. Api / Qiniu / streamDisabled  POST 禁用流
+## 7. Api / qiniu / streamDisabled  POST 禁用流
     
 ### 必须参数
 * streamKey string 流名称  名称必须满足 4-200个数字或字母
@@ -265,7 +269,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 8. Api / Qiniu / streamDisabled  POST 启用流
+## 8. Api / qiniu / streamEnabled  POST 启用流
     
 ### 必须参数
 * streamKey string 流名称  名称必须满足 4-200个数字或字母
@@ -294,7 +298,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 9. Api / Qiniu / liveSave  POST 保存直播
+## 9. Api / qiniu / liveSave  POST 保存直播
     
 ### 必须参数
 * @param request $streamKey 流名称.
@@ -331,43 +335,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 10. Api / Qiniu / liveSave  POST 保存直播
-    
-### 必须参数
-* @param request $streamKey 流名称.
-* @param request $start:    Unix 时间戳, 起始时间, 0 值表示不指定, 则不限制起始时间.
-* @param request $end       Unix 时间戳, 结束时间, 0 值表示当前时间.
-
-### 返回
-``` 
-    {
-        "code":"200",
-        "result":{
-            "end":1587197168,
-            "fname":"recordings/z1.testbg.test/0_1587373142.m3u8",
-            "start":1586936811
-        },
-        "msg":"success"
-    }
-
-    200 {
-        
-    }
-    404 {
-        "error": "stream not found"
-    }
-    619 {
-        "error": "no live" // 流不在直播
-    }
-
-    612 {
-    "error": "stream not found"
-    }
-
-
-```
-
-## 11. Api / Qiniu / liveSaveAs  POST 灵活度更高的保存直播回放
+## 10. Api / qiniu / liveSaveAs  POST 灵活度更高的保存直播回放
     
 ### 必须参数
 * @param string $streamKey 流名称.
@@ -424,7 +392,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 11. Api / Qiniu / liveSaveAs  POST 查询推流历史
+## 11. Api / qiniu / liveHistoryActivity  POST 查询推流历史
     
 ### 必须参数
 * @param string $streamKey 流名称.
@@ -474,7 +442,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 12. Api / Qiniu / liveSnapShot  POST 保存直播截图
+## 12. Api / qiniu / liveSnapShot  POST 保存直播截图
     
 ### 必须参数
 * @param string $streamKey 流名称.
@@ -518,7 +486,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 13. Api / Qiniu / liveUpdateConverts  POST 更改流的实时转码规格
+## 13. Api / qiniu / liveUpdateConverts  POST 更改流的实时转码规格
     
 ### 必须参数
 * @param string $streamKey 流名称.
@@ -565,7 +533,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 13. Api / Qiniu / rtmpPushUrlCreate  POST 生成 RTMP 推流地址
+## 13. Api / qiniu / rtmpPushUrlCreate  POST 生成 RTMP 推流地址
     
 ### 必须参数
 * @param string $streamKey 流名称.
@@ -607,7 +575,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 14. Api / Qiniu / hlsPlayUrlGet   HLS 直播放址
+## 14. Api / qiniu / hlsPlayUrlGet   HLS 直播放址
     
 ### 必须参数
 * @param string $streamKey 流名称.
@@ -649,7 +617,7 @@ php vendor/bin/easyswoole install
 
 Î
 
-## 14. Api / Qiniu / rtmpPlayUrlGet   RTMP 直播放址
+## 14. Api / qiniu / rtmpPlayUrlGet   RTMP 直播放址
     
 ### 必须参数
 * @param string $streamKey 流名称.
@@ -690,7 +658,7 @@ php vendor/bin/easyswoole install
 ```
 
 Î
-## 15. Api / Qiniu / hdlPlayUrlGet   HDL 直播放址
+## 15. Api / qiniu / hdlPlayUrlGet   HDL 直播放址
     
 ### 必须参数
 * @param string $streamKey 流名称.
@@ -731,7 +699,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 15. Api / Qiniu / snapShotPlayUrlGet   截图直播地址
+## 15. Api / qiniu / snapShotPlayUrlGet   截图直播地址
     
 ### 必须参数
 * @param string $streamKey 流名称.
@@ -772,7 +740,7 @@ php vendor/bin/easyswoole install
 ```
 
 
-## 16. Api / Qiniu / tokenCreate   生成token
+## 16. Api / qiniu / tokenCreate   生成token
     
 ### 返回
 * RETURN
