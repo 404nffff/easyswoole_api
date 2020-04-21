@@ -10,8 +10,7 @@ require join(DIRECTORY_SEPARATOR, array(dirname(dirname(dirname(__FILE__))), 'Ut
 
 class Qiniu extends Base
 {
-
-
+    
     //七牛云 客户端
     private $client;
 
@@ -65,13 +64,13 @@ class Qiniu extends Base
     {
         preg_match('/httpcode:(\d+)/', $response, $arr);
         preg_match('/message{"error":"(.*?)"}/', $response, $arr2);
-        $httpCode = $arr[1];
-        $message  = $arr2[1];
+        $httpCode = isset($arr[1])?$arr[1]:999;
+        $message  = isset($arr2[1])?$arr2[1]:$response;
 
-        if(!isset($httpCode) && !isset($message)) {
-            $httpCode = '999';
-            $message  = $response;
-        }
+        // if(!isset($httpCode) && !isset($message)) {
+        //     $httpCode = '999';
+        //     $message  = $response;
+        // }
 
         return ['code' => $httpCode, 'msg' => $message];
     }

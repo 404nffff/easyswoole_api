@@ -14,10 +14,13 @@ use EasySwoole\RedisPool\RedisPool;
 
 use \EasySwoole\Pool\Manager;
 
-
+use EasySwoole\Component\Singleton;
 
 class RedisSortedSets 
 {
+
+    //单例
+    use Singleton;
 
     //连接池
     protected $pool;

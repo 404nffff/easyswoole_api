@@ -31,24 +31,26 @@ class Router extends AbstractRouter
 
         $routeCollector->addGroup('/api',function (RouteCollector $collector){
             
-            $collector->get('/streamCreate','Api/Qiniu/streamCreate');
-            $collector->get('/streamInfoGet','Api/Qiniu/streamInfoGet');
-            $collector->get('/streamAllGet','Api/Qiniu/streamAllGet');
-            $collector->get('/streamLiveAllGet','Api/Qiniu/streamLiveAllGet');
-            $collector->get('/streamLiveStatusGet','Api/Qiniu/streamLiveStatusGet');
-            $collector->get('/streamLiveStatusBatchGet','Api/Qiniu/streamLiveStatusBatchGet');
-            $collector->get('/streamDisabled','Api/Qiniu/streamDisabled');
-            $collector->get('/streamEnabled','Api/Qiniu/streamEnabled');
-            $collector->get('/liveSave','Api/Qiniu/liveSave');
-            $collector->get('/liveSaveAs','Api/Qiniu/liveSaveAs');
-            $collector->get('/liveHistoryActivity','Api/Qiniu/liveHistoryActivity');
-            $collector->get('/liveSnapShot','Api/Qiniu/liveSnapShot');
-            $collector->get('/liveUpdateConverts','Api/Qiniu/liveUpdateConverts');
-            $collector->get('/rtmpPushUrlCreate','Api/Qiniu/rtmpPushUrlCreate');
-            $collector->get('/rtmpPlayUrlGet','Api/Qiniu/rtmpPlayUrlGet');
-            $collector->get('/hlsPlayUrlGet','Api/Qiniu/hlsPlayUrlGet');
-            $collector->get('/hdlPlayUrlGet','Api/Qiniu/hdlPlayUrlGet');
-            $collector->get('/snapShotPlayUrlGet','Api/Qiniu/snapShotPlayUrlGet');
+            $collector->post('/tokenCreate','Api/Qiniu/tokenCreate');
+            $collector->post('/tokenCheck','Api/Qiniu/tokenCheck');
+            $collector->post('/streamCreate','Api/Qiniu/streamCreate');
+            $collector->post('/streamInfoGet','Api/Qiniu/streamInfoGet');
+            $collector->post('/streamAllGet','Api/Qiniu/streamAllGet');
+            $collector->post('/streamLiveAllGet','Api/Qiniu/streamLiveAllGet');
+            $collector->post('/streamLiveStatusGet','Api/Qiniu/streamLiveStatusGet');
+            $collector->post('/streamLiveStatusBatchGet','Api/Qiniu/streamLiveStatusBatchGet');
+            $collector->post('/streamDisabled','Api/Qiniu/streamDisabled');
+            $collector->post('/streamEnabled','Api/Qiniu/streamEnabled');
+            $collector->post('/liveSave','Api/Qiniu/liveSave');
+            $collector->post('/liveSaveAs','Api/Qiniu/liveSaveAs');
+            $collector->post('/liveHistoryActivity','Api/Qiniu/liveHistoryActivity');
+            $collector->post('/liveSnapShot','Api/Qiniu/liveSnapShot');
+            $collector->post('/liveUpdateConverts','Api/Qiniu/liveUpdateConverts');
+            $collector->post('/rtmpPushUrlCreate','Api/Qiniu/rtmpPushUrlCreate');
+            $collector->post('/rtmpPlayUrlGet','Api/Qiniu/rtmpPlayUrlGet');
+            $collector->post('/hlsPlayUrlGet','Api/Qiniu/hlsPlayUrlGet');
+            $collector->post('/hdlPlayUrlGet','Api/Qiniu/hdlPlayUrlGet');
+            $collector->post('/snapShotPlayUrlGet','Api/Qiniu/snapShotPlayUrlGet');
         });
 
         $this->setMethodNotAllowCallBack(function (Request $request,Response $response){

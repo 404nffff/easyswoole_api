@@ -771,4 +771,22 @@ php vendor/bin/easyswoole install
 
 ```
 
+
+## 16. Api / Qiniu / tokenCreate   生成token
+    
+### 返回
+* RETURN
+* token 有限日期 7 天，时间少于1天时，生成新token保存在header里带参数返回 header [token :xxxx]
+* api请求带上 header token:xxxx
+
+``` 
+    
+    
+    {
+        "code":200,
+        "result":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODgwNTM0NjMsInN1YiI6ImFwaSIsIm5iZiI6MTU4NzQ0ODY2MywiYXVkIjoicWluaXUiLCJpYXQiOjE1ODc0NDg2NjMsImp0aSI6ImQyOWIwYzIyOWMwMWZlMTMwM2E1OGYwNjc2NWI0NDg1Iiwic3RhdHVzIjoxLCJkYXRhIjpudWxsfQ.9Pv7WPysbcQTdo9BlhDon0vlSqPnw6IasdasdadZo","msg":"success"
+    }
+
+```
+
 Î

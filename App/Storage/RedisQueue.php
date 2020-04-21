@@ -15,11 +15,18 @@ use EasySwoole\RedisPool\RedisPool;
 
 use \EasySwoole\Pool\Manager;
 
+use EasySwoole\Component\Singleton;
+
 class RedisQueue  implements QueueDriverInterface
 {
+    //单例
+    use Singleton;
+
 
     //连接池配置
     protected $pool;
+
+ 
 
     //队列名称
     protected $queueName;
