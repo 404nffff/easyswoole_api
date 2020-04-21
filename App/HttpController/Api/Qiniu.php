@@ -317,14 +317,12 @@ class Qiniu extends Base
      * 禁用流
      * 
      * @param request $streamKey    流名称.
-     * @param request $disabledTill Unix 时间戳, 在这之前流均不可用。不填则默认为 -1（永久禁播）.
      * 
      * @return json
      */
     public function streamEnabled()
     {
         $streamKey    = $this->request()->getRequestParam('streamKey');
-        $disabledTill = $this->request()->getRequestParam('disabledTill');
         if(!$this->streamKeyValiData($streamKey)) {
             return false;
         }
