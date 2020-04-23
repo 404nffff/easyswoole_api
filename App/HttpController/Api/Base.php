@@ -14,6 +14,9 @@ use EasySwoole\Jwt\Jwt;
 
 use App\Storage\RedisSortedSets;
 
+
+use EasySwoole\EasySwoole\Config as GlobalConfig;
+
 abstract class Base extends Controller
 {
     protected function onRequest(?string $action): ?bool
@@ -168,4 +171,25 @@ abstract class Base extends Controller
             break;
         }
     }
+
+     /**
+     * 推送到redis 
+     * 
+     * @param array $pushData 推送数据
+     * 
+     * @return string
+     */
+    protected function redisPush($pushData)
+    {
+        $redisName    = GlobalConfig::getInstance()->getConf('TASK_REDIS_DANMU_SEND_NAME');
+        $redisChannel = GlobalConfig::getInstance()->getConf('REDIS_DANMU_SUB_CHANNEL_NAME');
+        $redis        = \EasySwoole\Pool\Manager::getInstance()->get($redisName)->getObj();
+
+        $jsonData = json_encode($pushData);
+
+        $redis->publish($redisChannel, $jsonData);
+
+        \EasySwoole\Pool\Manager::getInstance()->get($redisName)->recycleObj($redis);
+    }
+
 }

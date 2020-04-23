@@ -1,4 +1,9 @@
 <?php
+/**
+ * 七牛云 api
+ * 
+ * Class Qiniu
+ */
 namespace App\HttpController\Api;
 
 use App\HttpController\Api\Base;

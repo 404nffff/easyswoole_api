@@ -33,6 +33,18 @@ return [
         'POOL_MAX_NUM'  => '20',
         'POOL_TIME_OUT' => '0.1',
     ],
+
+    'MYSQL2' => [
+        'host'          => '47.106.239.96',
+        'port'          => '3306',
+        'user'          => 'fk_foke2',
+        'timeout'       => '5',
+        'charset'       => 'utf8mb4',
+        'password'      => 'fook123?',
+        'database'      => 'fk_foke2',
+        'POOL_MAX_NUM'  => '20',
+        'POOL_TIME_OUT' => '0.1',
+    ],
     
 
     //发布 / 订阅消息 配置
@@ -73,6 +85,19 @@ return [
     'QINIU_HTTP_DOMAIN' => '',
     
     //七牛 直播api对接使用 直播空间
-    'QINIU_HUB' => ''
+    'QINIU_HUB' => '',
+
+     //TASK\DanmuBroadCastTask 广播弹幕使用注册Redis 名称
+     'TASK_REDIS_DANMU_SEND_NAME'  => 'redis1',
+
+     //弹幕订阅频道名称
+    'REDIS_DANMU_SUB_CHANNEL_NAME' => 'danmu',
+
+    //红包队列使用redis 注册名称
+    'REDIS_LOTTERY_USE_NAME' => 'redis1',
+
+    //红包队列名称前缀
+    'REDIS_LOTTERY_QUEUE_NAME_PREFIX' => 'lottery_',
+
 
 ];

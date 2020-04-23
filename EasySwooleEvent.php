@@ -24,6 +24,8 @@ use Swoole\Timer as SwooleTimer;
 use EasySwoole\ORM\DbManager;
 use EasySwoole\ORM\Db\Connection;
 use EasySwoole\ORM\Db\Config;
+use EasySwoole\ORM\Db\MysqlPool;
+
 
 
 //swoole table
@@ -79,7 +81,11 @@ class EasySwooleEvent implements Event
 
         //注册MYSQL
         $config = new Config(GlobalConfig::getInstance()->getConf("MYSQL"));
-        DbManager::getInstance()->addConnection(new Connection($config));
+        DbManager::getInstance()->addConnection(new Connection($config), 'mysql1');
+
+        $config2 = new Config(GlobalConfig::getInstance()->getConf("MYSQL2"));
+        
+        DbManager::getInstance()->addConnection(new Connection($config2), 'mysql2');
     }
 
     public static function mainServerCreate(EventRegister $register)
@@ -97,7 +103,8 @@ class EasySwooleEvent implements Event
 
         $register->add($register::onWorkerStart,function (){
             //链接预热
-            DbManager::getInstance()->getConnection()->getClientPool()->keepMin();
+            DbManager::getInstance()->getConnection('mysql1')->getClientPool()->keepMin();
+            DbManager::getInstance()->getConnection('mysql2')->getClientPool()->keepMin();
         });
     }
 
