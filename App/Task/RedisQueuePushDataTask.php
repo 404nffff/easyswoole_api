@@ -60,7 +60,7 @@ class RedisQueuePushDataTask implements TaskInterface
         $job = new Job();
         $job->setJobData($this->taskData);
 
-        var_dump($redisQueue->push($job));
+        $redisQueue->push($job);
 
 
         return true;

@@ -26,5 +26,19 @@ class PlayerRedBag extends Base
     protected $createTime    = 'create_time';
     protected $updateTime    = 'update_time';
 
-   
+    /**
+     * 检查数据是否存在 pid
+     * 
+     * @return false | array.
+     */
+    public function checkExistsByPid($pid)
+    {
+        $data = $this->where('red_pid', $pid)->get();
+
+        if($data == null) {
+            return false;
+        }
+
+        return $data->toArray();
+    }
 }

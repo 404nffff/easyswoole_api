@@ -57,7 +57,7 @@ class RedisQueuePullDataTask implements TaskInterface
         $jobData = $redisQueue->pop(60);
                                         
         if ($jobData == null) {
-           return false;
+           return null;
         }
 
         $jobData = $jobData->getJobData();
