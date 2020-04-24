@@ -16,6 +16,8 @@ use App\Storage\RedisSortedSets;
 use EasySwoole\EasySwoole\Config as GlobalConfig;
 use App\Utils\Curl;
 
+use EasySwoole\Component\Context\ContextManager;
+
 abstract class Base extends Controller
 {
     protected function onRequest(?string $action): ?bool
@@ -200,6 +202,8 @@ abstract class Base extends Controller
             $this->writeJson(999, null, 'token 无效');
             return false;
         }
+
+        return true;
     }
 
 
@@ -222,6 +226,49 @@ abstract class Base extends Controller
         $redis->publish($redisChannel, $jsonData);
 
         \EasySwoole\Pool\Manager::getInstance()->get($redisName)->recycleObj($redis);
+    }
+
+
+     /**
+     * 上下文管理器 设置数据 
+     * 
+     * @param string $key   键
+     * @param string $value 值
+     * 
+     * @return void
+     */
+    protected function contextSet($key, $value)
+    {
+        ContextManager::getInstance()->set($key, $value);
+    }
+
+
+     /**
+     * 上下文管理器 设置数据 多列
+     * 
+     * @param array $contextArray 数组
+     * 
+     * @return void
+     */
+    protected function contextArraySet($contextArray)
+    {
+        foreach($contextArray as $key => $value) {
+            ContextManager::getInstance()->set($key, $value);
+        }
+        
+    }
+
+
+     /**
+     * 上下文管理器 获取数据 
+     * 
+     * @param string $key   键
+     * 
+     * @return ContextManager
+     */
+    protected function contextGet($key)
+    {
+        return ContextManager::getInstance()->get($key);
     }
 
 }

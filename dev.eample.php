@@ -34,7 +34,7 @@ return [
         'POOL_TIME_OUT' => '0.1',
     ],
 
-    'MYSQL2' => [
+    'MYSQL_FOKE' => [
         'host'          => '47.106.239.96',
         'port'          => '3306',
         'user'          => 'fk_foke2',

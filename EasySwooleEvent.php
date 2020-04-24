@@ -83,9 +83,9 @@ class EasySwooleEvent implements Event
         $config = new Config(GlobalConfig::getInstance()->getConf("MYSQL"));
         DbManager::getInstance()->addConnection(new Connection($config), 'mysql1');
 
-        $config2 = new Config(GlobalConfig::getInstance()->getConf("MYSQL2"));
+        $config2 = new Config(GlobalConfig::getInstance()->getConf("MYSQL_FOKE"));
         
-        DbManager::getInstance()->addConnection(new Connection($config2), 'mysql2');
+        DbManager::getInstance()->addConnection(new Connection($config2), 'foke');
     }
 
     public static function mainServerCreate(EventRegister $register)
@@ -104,7 +104,7 @@ class EasySwooleEvent implements Event
         $register->add($register::onWorkerStart,function (){
             //链接预热
             DbManager::getInstance()->getConnection('mysql1')->getClientPool()->keepMin();
-            DbManager::getInstance()->getConnection('mysql2')->getClientPool()->keepMin();
+            DbManager::getInstance()->getConnection('foke')->getClientPool()->keepMin();
         });
     }
 

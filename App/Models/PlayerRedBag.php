@@ -6,10 +6,10 @@ use EasySwoole\ORM\DbManager;
 
 use App\Models\Base;
 /**
- *  foke / 活动表
+ *  foke / 活动 红包表
  * Class Player
  */
-class Player extends Base
+class PlayerRedBag extends Base
 {
 
     //连接名称
@@ -19,10 +19,10 @@ class Player extends Base
     *  表名称
     * @var string 
     */
-    protected $tableName = 't_player';
+    protected $tableName = 't_player_red_bag';
 
     // 都是非必选的，默认值看文档下面说明
-    protected $autoTimeStamp = false;
+    protected $autoTimeStamp = true;
     protected $createTime    = 'create_time';
     protected $updateTime    = 'update_time';
 

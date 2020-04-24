@@ -25,6 +25,6 @@ class Base extends AbstractModel
             return false;
         }
 
-        return true;
+        return $data->toArray();
     }
 }
