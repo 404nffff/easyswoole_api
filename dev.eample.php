@@ -75,17 +75,17 @@ return [
     //REDIS2服务注册名称
     'REDIS_REGISTER_NAME_2' => 'redis2',
 
-    //七牛 直播api对接使用 AccessKey
-    'QINIU_ACCESS_KEY' => '',
+    //qiniu AccessKey
+    'QINIU_ACCESS_KEY' => 'ryNCEQbrY4ZlT1tDsThs_QNMVTnW-Ab3W4-XIB6s',
 
-    //七牛 直播api对接使用 SecretKey
-    'QINIU_SECRET_KEY' => '',
-    
+    //qiniu SecretKey
+    'QINIU_SECRET_KEY' => 'lXKrWsrLLn00JXAsTqU2do8H1_qrOo1KpjXEx_Wb',
+
     //七牛 直播api对接使用 域名
-    'QINIU_HTTP_DOMAIN' => '',
+    'QINIU_HTTP_DOMAIN' => 'fooktech.cn',
     
     //七牛 直播api对接使用 直播空间
-    'QINIU_HUB' => '',
+    'QINIU_HUB' => 'ipin-home',
 
      //TASK\DanmuBroadCastTask 广播弹幕使用注册Redis 名称
      'TASK_REDIS_DANMU_SEND_NAME'  => 'redis1',
