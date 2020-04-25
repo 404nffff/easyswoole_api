@@ -20,10 +20,12 @@ use App\Task\RedisQueuePullDataTask;
 use App\Models\Player;
 use App\Models\OtherUser;
 use App\Models\PlayerRedBag;
-
+use EasySwoole\Component\Context\ContextManager;
 
 class Lottery extends Base
 {
+
+    private $pid;
 
     /**
      * 生成红包
@@ -121,7 +123,7 @@ class Lottery extends Base
         $playRedBag->red_total_money    = $redTotalMoney;
         $playRedBag->red_num            = $redNum;
         $playRedBag->red_type           = $type;
-        $playRedBag->red_send_time      = $redNum;
+        $playRedBag->red_send_time      = time();
 
 
         $playRedBagSaveReturn = $playRedBag->save();
@@ -130,28 +132,23 @@ class Lottery extends Base
             return false;
         }
 
-
-        $this->contextSet('pid', $playRedBagSaveReturn);
-        $this->contextSet('unionid', $unionid);
-        $this->contextSet('playerId', $playerId);
-        $this->contextSet('type', $type);
-
-        $this->contextSet('redTotalMoney', $redTotalMoney);
-        $this->contextSet('redNum', $redNum);
+        $this->pid = $playRedBagSaveReturn;
         
 
-        // go(function (){
-        //     $csp = new \EasySwoole\Component\Csp();
+         go(function (){
+
+            
+             $csp = new \EasySwoole\Component\Csp();
             
         //     //推送弹幕到 Redis队列 协程异步
-        //     $csp->add('t1',function (){
-                
-                $type          = $this->contextGet('type');
-                $pid           = $this->contextGet('pid');
-                $redTotalMoney = $this->contextGet('redTotalMoney');
-                $redNum        = $this->contextGet('redNum');
-                $unionid       = $this->contextGet('unionid');
-                $playerId      = $this->contextGet('playerId');
+            $csp->add('t1',function (){
+               
+                $redTotalMoney = $this->request()->getRequestParam('redTotalMoney');
+                $redNum        = $this->request()->getRequestParam('redNum');
+                $unionid       = $this->request()->getRequestParam('unionid');
+                $playerId      = $this->request()->getRequestParam('playerId');
+                $type          = $this->request()->getRequestParam('type');
+
 
                 $redBoxArray = [];
                 if($type == 1) {
@@ -165,22 +162,27 @@ class Lottery extends Base
                 $redisQueueNamePrefix = GlobalConfig::getInstance()->getConf('REDIS_LOTTERY_QUEUE_NAME_PREFIX');
                 $redisName            = GlobalConfig::getInstance()->getConf('REDIS_LOTTERY_USE_NAME');
         
-                $queueName = $redisQueueNamePrefix.$unionid.'_'.$playerId;
-               
+                $queueName = $redisQueueNamePrefix.$playerId.'_'.$this->pid;
+                var_dump($queueName);
+
                 foreach($redBoxArray as $value) {
                     $task = TaskManager::getInstance();
-                    var_dump($task->async(new RedisQueuePushDataTask($value, $redisName, $queueName)));
+                    $task->async(new RedisQueuePushDataTask($value, $redisName, $queueName));
                 }
-               // \co::sleep(1);
-               //return 't1 result';
-            // });
+               \co::sleep(1);
+               return 't1 result';
+             });
 
-            // $csp->add('t2',function (){
+            $csp->add('t2',function (){
                 
-                $type          = $this->contextGet('type');
-                $pid           = $this->contextGet('pid');
-                $redTotalMoney = $this->contextGet('redTotalMoney');
-                $redNum        = $this->contextGet('redNum');
+            
+                
+                $redTotalMoney = $this->request()->getRequestParam('redTotalMoney');
+                $redNum        = $this->request()->getRequestParam('redNum');
+                $unionid       = $this->request()->getRequestParam('unionid');
+                $playerId      = $this->request()->getRequestParam('playerId');
+                $type          = $this->request()->getRequestParam('type');
+
 
                 $redBoxArray = [];
                 if($type == 1) {
@@ -197,8 +199,10 @@ class Lottery extends Base
                     $redTitle = $value['red_title'];
                     $redMoney = $value['red_money'];
 
-                    $saveData[$redCode]['red_pid']         = $pid;
+                    $saveData[$redCode]['red_pid']         = $this->pid;
                     $saveData[$redCode]['red_title']       = $redTitle;
+                    $saveData[$redCode]['red_num']         = 1;
+                    $saveData[$redCode]['red_code']        = $redCode;
                     $saveData[$redCode]['red_money']       = $redMoney;
                     $saveData[$redCode]['red_total_money'] = $redTotalMoney;
                     $saveData[$redCode]['red_type']        = $type;
@@ -207,13 +211,12 @@ class Lottery extends Base
 
                 $playRedBagSaveReturn = $playRedBag->saveAll($saveData);
                 
-                //\co::sleep(3);
-               var_dump($playRedBagSaveReturn);
-        //     });
-        //      $csp->exec();
-        // });
+                \co::sleep(3);
+             });
+            $csp->exec();
+        });
 
-
+        $this->writeJson('200', ['rid' => $this->pid, 'player_id' => $playerId], '成功');
 
         // $this->redisPush(['action' => 'broadCast', 'content' => '123123', 'roomId' => 11, 'username' => 'server']);
     }
@@ -222,24 +225,82 @@ class Lottery extends Base
     /**
      * 获取红包
      * 
+     * @param string unionid  user unionid.
+     * @param string playerId 活动id.
+     * @param int    rid      红包id.
+     * 
      * @return json | null.
      */
     public function redBoxGet()
     {
-
+        $unionid  = $this->request()->getRequestParam('unionid');
+        $playerId = $this->request()->getRequestParam('playerId');
+        $rid      = $this->request()->getRequestParam('rid');
         
-        // $data =  $task->sync(function (){
-        //     echo "同步调用task1\n";
-        //     return "可以返回调用结果\n";
-        // });
+        if(
+            !is_numeric($rid) || 
+            !is_numeric($playerId) || 
+            $unionid == ''
+        ) {
+            $this->writeJson('400', null, '参数错误');
+            return false;
+        }
+        
+
+        $resForPlayer = Player::create()->checkExistsById($playerId);
+
+       
+        if(!$resForPlayer) {
+            $this->writeJson('999', null, '活动不存在');
+            return false;
+        }
+
+
+        $resForOther = OtherUser::create()->checkExistsByUnionid($unionid);
+
+        if(!$resForOther) {
+            $this->writeJson('999', null, '用户不存在');
+            return false;
+        }
+        $otherUserId = $resForOther['id'];
+
+        $playRedBag = PlayerRedBag::create()->checkExistsById($rid);
+
+        if(!$resForOther) {
+            $this->writeJson('999', null, '红包不存在');
+            return false;
+        }
+
 
         $redisQueueNamePrefix = GlobalConfig::getInstance()->getConf('REDIS_LOTTERY_QUEUE_NAME_PREFIX');
         $redisName            = GlobalConfig::getInstance()->getConf('REDIS_LOTTERY_USE_NAME');
-        $queueName            = $redisQueueNamePrefix.'10_10';
+        $queueName            = $redisQueueNamePrefix.$playerId.'_'.$rid;
+        
         $task                 = TaskManager::getInstance();
         $result               = $task->sync(new RedisQueuePullDataTask($redisName, $queueName));
+
+        if($result != null) {
+            $code = $result['red_code'];
+
+            $updateStatus = PlayerRedBag::create()->update(
+                //update
+                [
+                'other_uesr_unionid' => $unionid,
+                'other_user_id'      => $otherUserId,
+                'red_get_time'       => time()
+                ], 
+                //where
+                [
+                    'red_pid'  => $rid,
+                    'red_code' => $code
+                ]
+            );
+
+            // var_dump($updateStatus);
+        }
+
        
-        $this->writeJson(200, null, $result);
+        $this->writeJson(200, $result, '请求成功');
     }
 
 
