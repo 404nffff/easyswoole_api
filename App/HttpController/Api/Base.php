@@ -188,13 +188,12 @@ abstract class Base extends Controller
         $tokenArray    = $this->request()->getHeader('token');
         $token         = $tokenArray[0];
         $apiHttp       = GlobalConfig::getInstance()->getConf('API_HTTP_URL');
-        $apiHttpHeader = GlobalConfig::getInstance()->getConf('API_HTTP_HEADER');
         $jsonData      = json_encode(['token' => $token]);
 
         $header   = [
-            'Authorization:'.$apiHttpHeader
+            'Authorization:'.$token
             ];
-        $checkToken = Curl::getInstance()->post($apiHttp.'/live/user/check_token', $jsonData, $header);
+        $checkToken = Curl::getInstance()->post($apiHttp.'/app/player/index/check_token', $jsonData, $header);
         
         $checkTokenArray = json_decode($checkToken, true);
 

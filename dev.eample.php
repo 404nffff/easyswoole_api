@@ -100,9 +100,6 @@ return [
     'REDIS_LOTTERY_QUEUE_NAME_PREFIX' => 'lottery_',
 
      //API 请求服务器
-     'API_HTTP_URL' => 'https://test.fooktech.cn/',
-
-     'API_HTTP_HEADER' => 'cFZ3c3Y2bGRYazVnNGJDRXhhN0Q4WURUJkTlNDRktybDAmMCYxJjEmMCYyMTQ0MyYwMgTjY4MnhWMXVLaE9yaG9ESjlseFIyaW=='
-
+     'API_HTTP_URL' => 'https://test.fooktech.cn/'
 
 ];
