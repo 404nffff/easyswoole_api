@@ -193,7 +193,7 @@ abstract class Base extends Controller
         $header   = [
             'Authorization:'.$token
             ];
-        $checkToken = Curl::getInstance()->post($apiHttp.'/app/player/index/check_token', $jsonData, $header);
+        $checkToken = Curl::getInstance()->post($apiHttp.'/player/index/check_token', $jsonData, $header);
         
         $checkTokenArray = json_decode($checkToken, true);
 
