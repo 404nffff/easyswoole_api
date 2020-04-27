@@ -43,7 +43,7 @@ class UserAccountd extends Base
        $this->type         = 1;
        $this->order_id     = $orderId;
        $this->user_id      = $uid;
-       $this->add_time     = time();
+       $this->add_time     = date('Y-m-d H:i:s', time());
        $this->account_type = 7;
        $this->other_type   = $type;
 

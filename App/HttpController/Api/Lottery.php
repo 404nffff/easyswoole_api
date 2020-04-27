@@ -289,8 +289,9 @@ class Lottery extends Base
 
             $orderId = 1111;
             $type    = 5; //5 直播红包 6 直播送礼
-            if(User::create()->playerAmountUpdate($orderId, $otherUserId, $money, $type)) {
+            if(!User::create()->playerAmountUpdate($orderId, $otherUserId, $money, $type)) {
                 $this->writeJson(999, null, '异常');
+                return false;
             }
 
             $updateStatus = PlayerRedBag::create()->update(
