@@ -20,7 +20,7 @@ use App\Task\RedisQueuePullDataTask;
 use App\Models\Player;
 use App\Models\OtherUser;
 use App\Models\PlayerRedBag;
-use EasySwoole\Component\Context\ContextManager;
+use App\Models\User;
 
 class Lottery extends Base
 {
@@ -50,9 +50,8 @@ class Lottery extends Base
         $type          = $this->request()->getRequestParam('type');
         
 
-        
         if(
-            $redTitle == '' || 
+            $redTitle == '' ||
             !is_numeric($redTotalMoney) || 
             !is_numeric($redNum) || 
             !is_numeric($playerId) || 
@@ -107,7 +106,8 @@ class Lottery extends Base
         }
 
 
-        $otherUserId = $resForOther['id'];
+        $otherUserId = $resForOther['user_id'];
+        $avatar      = $resForOther['headimgurl'];
 
 
         $playRedBag = PlayerRedBag::create();
@@ -163,7 +163,7 @@ class Lottery extends Base
                 $redisName            = GlobalConfig::getInstance()->getConf('REDIS_LOTTERY_USE_NAME');
         
                 $queueName = $redisQueueNamePrefix.$playerId.'_'.$this->pid;
-                var_dump($queueName);
+ 
 
                 foreach($redBoxArray as $value) {
                     $task = TaskManager::getInstance();
@@ -215,10 +215,12 @@ class Lottery extends Base
              });
             $csp->exec();
         });
+        
+        $this->redisPush(['action' => 'redBag', 'content' => $this->pid, 'roomId' => $playerId, 'uid' => $unionid]);
+        
+        $this->writeJson('200', ['rid' => $this->pid, 'player_id' => $playerId, 'avatar' => $avatar], '成功');
 
-        $this->writeJson('200', ['rid' => $this->pid, 'player_id' => $playerId], '成功');
-
-        // $this->redisPush(['action' => 'broadCast', 'content' => '123123', 'roomId' => 11, 'username' => 'server']);
+    
     }
 
 
@@ -262,9 +264,9 @@ class Lottery extends Base
             $this->writeJson('999', null, '用户不存在');
             return false;
         }
-        $otherUserId = $resForOther['id'];
+        $otherUserId = $resForOther['user_id'];
 
-        $playRedBag = PlayerRedBag::create()->checkExistsById($rid);
+        $playRedBag  = PlayerRedBag::create()->checkExistsById($rid);
 
         if(!$resForOther) {
             $this->writeJson('999', null, '红包不存在');
@@ -280,7 +282,16 @@ class Lottery extends Base
         $result               = $task->sync(new RedisQueuePullDataTask($redisName, $queueName));
 
         if($result != null) {
-            $code = $result['red_code'];
+            $code  = $result['red_code'];
+            $money = $result['red_money'];
+
+            
+
+            $orderId = 1111;
+            $type    = 5; //5 直播红包 6 直播送礼
+            if(User::create()->playerAmountUpdate($orderId, $otherUserId, $money, $type)) {
+                $this->writeJson(999, null, '异常');
+            }
 
             $updateStatus = PlayerRedBag::create()->update(
                 //update
@@ -295,8 +306,7 @@ class Lottery extends Base
                     'red_code' => $code
                 ]
             );
-
-            // var_dump($updateStatus);
+            
         }
 
        

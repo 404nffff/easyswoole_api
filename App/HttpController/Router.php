@@ -24,7 +24,7 @@ class Router extends AbstractRouter
     public function initialize(RouteCollector $routeCollector)
     {
         //全局模式拦截
-        $this->setGlobalMode(true);
+        //$this->setGlobalMode(true);
 
         $routeCollector->get('/','Index/index');
      
@@ -53,6 +53,7 @@ class Router extends AbstractRouter
             $collector->post('/snapShotPlayUrlGet','Api/Qiniu/snapShotPlayUrlGet');
         });
 
+        
 
         //抽奖红包
         $routeCollector->addGroup('/api/lottery',function (RouteCollector $collector){
