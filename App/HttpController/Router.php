@@ -62,6 +62,13 @@ class Router extends AbstractRouter
             $collector->post('/redBoxGet','Api/Lottery/redBoxGet');
         });
 
+        //直播活动
+        $routeCollector->addGroup('/api/player',function (RouteCollector $collector){
+            
+            //打赏礼物
+            $collector->post('/giftSend','Api/Player/giftSend');
+        });
+
         $this->setMethodNotAllowCallBack(function (Request $request,Response $response){
             $response->write('未找到处理方法');
             return false;//结束此次响应

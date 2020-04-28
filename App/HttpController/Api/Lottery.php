@@ -21,6 +21,8 @@ use App\Models\Player;
 use App\Models\OtherUser;
 use App\Models\PlayerRedBag;
 use App\Models\User;
+use App\Models\Payment;
+use App\Models\LiveStatus;
 
 class Lottery extends Base
 {
@@ -48,13 +50,16 @@ class Lottery extends Base
         $unionid       = $this->request()->getRequestParam('unionid');
         $playerId      = $this->request()->getRequestParam('playerId');
         $type          = $this->request()->getRequestParam('type');
-        
+        $payId         = $this->request()->getRequestParam('payId');
+        $playerTimeId  = $this->request()->getRequestParam('playerTimeId');
 
         if(
             $redTitle == '' ||
             !is_numeric($redTotalMoney) || 
             !is_numeric($redNum) || 
             !is_numeric($playerId) || 
+            !is_numeric($playerTimeId) || 
+            !is_numeric($payId) || 
             $unionid == ''||
             ($type != 1 && $type != 2)
         ) {
@@ -92,10 +97,17 @@ class Lottery extends Base
 
         
         $playerName       = $resForPlayer['name'];
-        $playerLiveTime   = $resForPlayer['live_time'];
         $playerMasterId   = $resForPlayer['player_master_id'];
         $playerMasterName = $resForPlayer['player_master_name'];
 
+
+        $resForLiveStatus = LiveStatus::create()->checkExistsByIdAndPlayerId($playerTimeId, $playerId);
+
+        if(!$resForLiveStatus) {
+            $this->writeJson('999', null, '活动时间段不存在');
+            return false;
+        }
+        $playerLiveTime = $resForLiveStatus['live_time'];
 
 
         $resForOther = OtherUser::create()->checkExistsByUnionid($unionid);
@@ -113,6 +125,7 @@ class Lottery extends Base
         $playRedBag = PlayerRedBag::create();
 
         $playRedBag->player_id          = $playerId;
+        $playRedBag->player_time_id     = $playerTimeId;
         $playRedBag->player_name        = $playerName;
         $playRedBag->player_live_time   = $playerLiveTime;
         $playRedBag->player_master_id   = $playerMasterId;
@@ -124,11 +137,17 @@ class Lottery extends Base
         $playRedBag->red_num            = $redNum;
         $playRedBag->red_type           = $type;
         $playRedBag->red_send_time      = time();
+        $playRedBag->payment_id         = $payId;
 
 
         $playRedBagSaveReturn = $playRedBag->save();
         if($playRedBagSaveReturn == null) {
             $this->writeJson('999', null, '操作失败');
+            return false;
+        }
+
+        if(!Payment::create()->payOrderIdConnect($payId, $playRedBagSaveReturn)) {
+            $this->writeJson('998', null, '操作失败');
             return false;
         }
 
@@ -235,13 +254,16 @@ class Lottery extends Base
      */
     public function redBoxGet()
     {
-        $unionid  = $this->request()->getRequestParam('unionid');
-        $playerId = $this->request()->getRequestParam('playerId');
-        $rid      = $this->request()->getRequestParam('rid');
-        
+        $unionid      = $this->request()->getRequestParam('unionid');
+        $playerId     = $this->request()->getRequestParam('playerId');
+        $rid          = $this->request()->getRequestParam('rid');
+        $playerTimeId = $this->request()->getRequestParam('playerTimeId');
+
+
         if(
             !is_numeric($rid) || 
             !is_numeric($playerId) || 
+            !is_numeric($playerTimeId) || 
             $unionid == ''
         ) {
             $this->writeJson('400', null, '参数错误');
@@ -257,6 +279,12 @@ class Lottery extends Base
             return false;
         }
 
+        $resForLiveStatus = LiveStatus::create()->checkExistsByIdAndPlayerId($playerTimeId, $playerId);
+
+        if(!$resForLiveStatus) {
+            $this->writeJson('999', null, '活动时间段不存在');
+            return false;
+        }
 
         $resForOther = OtherUser::create()->checkExistsByUnionid($unionid);
 
@@ -272,6 +300,7 @@ class Lottery extends Base
             $this->writeJson('999', null, '红包不存在');
             return false;
         }
+      
 
 
         $redisQueueNamePrefix = GlobalConfig::getInstance()->getConf('REDIS_LOTTERY_QUEUE_NAME_PREFIX');
@@ -286,8 +315,7 @@ class Lottery extends Base
             $money = $result['red_money'];
 
             
-
-            $orderId = 1111;
+            $orderId = $playRedBag['payment_id'];
             $type    = 5; //5 直播红包 6 直播送礼
             if(!User::create()->playerAmountUpdate($orderId, $otherUserId, $money, $type)) {
                 $this->writeJson(999, null, '异常');
@@ -297,6 +325,7 @@ class Lottery extends Base
             $updateStatus = PlayerRedBag::create()->update(
                 //update
                 [
+                'player_time_id'     => $playerTimeId,
                 'other_uesr_unionid' => $unionid,
                 'other_user_id'      => $otherUserId,
                 'red_get_time'       => time()
