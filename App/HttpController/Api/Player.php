@@ -165,4 +165,73 @@ class Player extends Base
         
         $this->writeJson('200', null, '打赏成功');
     }
+
+    /**
+     * 消息推送
+     * 
+     * @param string       $action       动作名称.
+     * @param string|array $content     发送内容.
+     * @param int          $playerId     活动id.
+     * @param int          $playerTimeId 活动时间段id.
+     * @param int          $unionid      用户unionid.
+     * 
+     * @return json | null.
+     */
+    public function msgPush()
+    {
+        $action       = $this->request()->getRequestParam('action');
+        $content      = $this->request()->getRequestParam('content');
+        $playerId     = $this->request()->getRequestParam('playerId');
+        $unionid      = $this->request()->getRequestParam('unionid');
+        $playerTimeId = $this->request()->getRequestParam('playerTimeId');
+
+        if(
+            !is_numeric($playerId) || 
+            $unionid == '' ||
+            $action == '' ||
+            $content == ''
+        ) {
+            $this->writeJson('400', null, '参数错误');
+            return false;
+        }
+
+        $resForPlayer = PlayerModel::create()->checkExistsById($playerId);
+
+        if(!$resForPlayer) {
+            $this->writeJson('999', null, '活动不存在');
+            return false;
+        }
+        
+        $resForLiveStatus = LiveStatus::create()->checkExistsByIdAndPlayerId($playerTimeId, $playerId);
+
+        if(!$resForLiveStatus) {
+            $this->writeJson('999', null, '活动时间段不存在');
+            return false;
+        }
+
+
+        $resForOther = OtherUser::create()->checkExistsByUnionid($unionid);
+
+        if(!$resForOther) {
+            $this->writeJson('999', null, '用户不存在');
+            return false;
+        }
+
+        $pushData = [
+            'action'  => $action, 
+            'content' => $content, 
+            'roomId'  => $playerId, 
+            'uid'     => $unionid
+            ];
+
+        
+        $redisStatus = $this->redisPush($pushData);
+
+        if(!$redisStatus) {
+            $this->writeJson('999', null, '推送失败');
+            return false;
+        }
+        
+        $this->writeJson('200', null, '推送成功');
+    }
 }

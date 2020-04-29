@@ -222,10 +222,11 @@ abstract class Base extends Controller
         
         $jsonData = json_encode($pushData);
         
-        var_dump($jsonData);
-        $redis->publish($redisChannel, $jsonData);
+
+        $returnData = $redis->publish($redisChannel, $jsonData);
 
         \EasySwoole\Pool\Manager::getInstance()->get($redisName)->recycleObj($redis);
+        return $returnData;
     }
 
 

@@ -67,6 +67,8 @@ class Router extends AbstractRouter
             
             //打赏礼物
             $collector->post('/giftSend','Api/Player/giftSend');
+            //消息推送
+            $collector->post('/msgPush','Api/Player/msgPush');
         });
 
         $this->setMethodNotAllowCallBack(function (Request $request,Response $response){
