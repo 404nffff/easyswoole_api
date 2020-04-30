@@ -170,7 +170,7 @@ class Player extends Base
      * 消息推送
      * 
      * @param string       $action       动作名称.
-     * @param string|array $content     发送内容.
+     * @param string|array $content      发送内容.
      * @param int          $playerId     活动id.
      * @param int          $playerTimeId 活动时间段id.
      * @param int          $unionid      用户unionid.
@@ -201,7 +201,7 @@ class Player extends Base
             $this->writeJson('999', null, '活动不存在');
             return false;
         }
-        
+
         $resForLiveStatus = LiveStatus::create()->checkExistsByIdAndPlayerId($playerTimeId, $playerId);
 
         if(!$resForLiveStatus) {

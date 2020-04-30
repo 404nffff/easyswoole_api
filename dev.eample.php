@@ -100,6 +100,9 @@ return [
     'REDIS_LOTTERY_QUEUE_NAME_PREFIX' => 'lottery_',
 
      //API 请求服务器
-     'API_HTTP_URL' => 'https://test.fooktech.cn/'
+     'API_HTTP_URL' => 'https://test.fooktech.cn/',
+
+     //定时推送任务 自定义进程定时器时间（毫秒）
+     'PROCESS_TIMER_TIME' => 5*1000
 
 ];

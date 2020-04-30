@@ -570,7 +570,7 @@ class Qiniu extends Base
         }
 
 
-        $url = \Qiniu\Pili\RTMPPublishURL("publish-rtmp.".$this->domain, $this->hubName, $streamKey, $expireAfterSeconds, $this->accessKey, $this->secertKey);
+        $url = \Qiniu\Pili\RTMPPublishURL("pili-publish-rtmp.".$this->domain, $this->hubName, $streamKey, $expireAfterSeconds, $this->accessKey, $this->secertKey);
        
         $this->writeJson('200', $url, 'success');
     }
@@ -594,7 +594,7 @@ class Qiniu extends Base
 
         $this->streamObjCreate($streamKey);
 
-        $url = \Qiniu\Pili\RTMPPlayURL("live-rtmp.".$this->domain, $this->hubName, $streamKey);
+        $url = \Qiniu\Pili\RTMPPlayURL("pili-live-rtmp.".$this->domain, $this->hubName, $streamKey);
        
         $this->writeJson('200', $url, 'success');
     }
@@ -618,7 +618,7 @@ class Qiniu extends Base
 
         $this->streamObjCreate($streamKey);
 
-        $url = \Qiniu\Pili\HLSPlayURL("live-hls.".$this->domain, $this->hubName, $streamKey);
+        $url = \Qiniu\Pili\HLSPlayURL("pili-live-hls.".$this->domain, $this->hubName, $streamKey);
        
         $this->writeJson('200', $url, 'success');
     }
@@ -641,7 +641,7 @@ class Qiniu extends Base
         }
 
         $this->streamObjCreate($streamKey);
-        $url =  \Qiniu\Pili\HDLPlayUR("live-hdl.".$this->domain, $this->hubName, $streamKey);
+        $url =  \Qiniu\Pili\HDLPlayUR("pili-live-hdl.".$this->domain, $this->hubName, $streamKey);
        
         $this->writeJson('200', $url, 'success');
     }
@@ -664,7 +664,7 @@ class Qiniu extends Base
         }
 
         $this->streamObjCreate($streamKey);
-        $url =  \Qiniu\Pili\SnapshotPlayURL("live-snapshot".$this->domain, $this->hubName, $streamKey);
+        $url =  \Qiniu\Pili\SnapshotPlayURL("pili-live-snapshot".$this->domain, $this->hubName, $streamKey);
        
         $this->writeJson('200', $url, 'success');
     }

@@ -70,6 +70,13 @@ class Router extends AbstractRouter
             //消息推送
             $collector->post('/msgPush','Api/Player/msgPush');
         });
+        
+        //定时器
+        $routeCollector->addGroup('/api/timer',function (RouteCollector $collector){
+            
+            //定时推送商品
+            $collector->get('/pushProduct','Api/Timer/pushProduct');
+        });
 
         $this->setMethodNotAllowCallBack(function (Request $request,Response $response){
             $response->write('未找到处理方法');
